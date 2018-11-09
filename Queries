@@ -1,0 +1,30 @@
+Report 1.
+
+SELECT tempdata.temperature AS Temperature, salesdata.item_name AS ItemName, SUM(salesdata.quantity) AS Quantity 
+FROM salesdata 
+INNER JOIN tempdata ON salesdata.created_at = tempdata.date 
+GROUP BY tempdata.temperature, salesdata.item_name, salesdata.quantity 
+ORDER BY SUM(salesdata.quantity) DESC;
+
+
+Report 2. (The results for report2 in the report2.csv are taken only for a part of the data as the joins were to slow to perform on my machine)
+
+SELECT lq.nameA item_name, AVG(lq.case1) avg_sale_when_colder, AVG(lq.case2) avg_sale_when_warmer 
+FROM
+(SELECT nameA,
+CASE  WHEN (tempB - tempA) < -1 THEN quanB - quanA ELSE NULL END AS case1,
+CASE WHEN (tempB - tempA) > 1  THEN quanB - quanA ELSE NULL END AS case2
+FROM (
+SELECT date(A.created1) createdA, A.name1 nameA, A.quan1 quanA, A.temp1 tempA, 
+date(B.created2) createdB, B.name2 nameB, B.quan quanB, B.temp2 tempB 
+FROM  (
+SELECT date(s1.created_at) created1, s1.quantity quan1, s1.item_name name1, date(t1.date) date1, t1.temperature temp1 
+FROM salesdata s1, tempdata t1 
+WHERE date(s1.created_at) = date(t1.date)) AS A 
+INNER JOIN  (
+SELECT date(s2.created_at) created2, s2.item_name name2, s2.quantity quan, date(t2.date) date2, t2.temperature temp2 
+FROM salesdata s2, tempdata t2 
+WHERE date(s2.created_at) = date(t2.date)) AS B 
+ON A.name1 = B.name2 
+WHERE DATEDIFF(date(B.created2), date(A.created1)) = 1) as C) AS lq GROUP BY lq.nameA;
+

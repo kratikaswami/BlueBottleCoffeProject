@@ -1,0 +1,28 @@
+* How would productize both reports? Please consider the following in your answer:
+Data modeling
+Data partioning
+Data backfill
+
+While building the design for this system, as a part of modeling, we would have to consider both normalzation of tables and number of joins to abblied on the data to obtain meaningful results. To balance both the aspects, I can think of using Star Schema for this scenario. The star schema provides balance between ETL maintainability and ease of analytics. Here, the salesdata table containing the details about trasactions will be our fact tables and the slowly changing hourly weather data table will be the dimension table. Dimension tables can be joined with the fact tables and meaningful results can hence be obtained.
+
+With generation of a lot of tansactional data here, it becomes difficult to perform analytics or run queries over such data with time. To overcome this posblem, data can be partitioned into independent, self contained chunks. One of the best ways to partition data is on datestamps. Transactional data is often organized with time stamps and these chunks can be used to perform batch ETL jobs on. Partitioning data on datestamps also improves querying speed.
+
+The ETL pipeline computes matrices and dimensions forward and not backward, but a lot of times backfilling is needed to reanalyse historical trends and movements. Partitioning data on datestamps also helps in this situation. Starting and Ending dates can be provided to backfill the data in the past. 
+
+
+* What are some tradeoffs and assumptions for your design of this ETL?
+
+Some of the tradeoffs and assumption in my design of this ETL are as follows:
+1. The temperature is considered in whole numbers and not fraction which makes the results less precise but more meaningful as compared to the result that could have been obtained from also considering the decimal part of the temperature.
+2. Hourly weather data has been used, minutes and seconds have been ignored, to limit the amount of data for similar reasons as point 1.
+3. The negative numbers in the quantity column of the salesdata table are assumed to be the items that have been returned or have been refunded for and so, they have not been removed from the report.
+
+
+* What some of the tools you would consider to build this into an ETL pipeline?
+
+To build this into an ETL pipeline, Iwould consider using the following tools:
+1. For the data pipeline, Amazon RDS, Apache Kafka Amazon S3.
+2. For the infrastructure, Terraform for AWS, Jenkins for CI/CD and Kubernetes for job scheduling. 
+3. For Product development, Chef can be used to ensure consistency between environments and Github to host code repositories. 
+
+

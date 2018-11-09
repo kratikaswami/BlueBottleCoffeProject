@@ -1,0 +1,26 @@
+For this project, my approach has been to modularize and simplify the given problem statement and hence come up with the required results.
+
+Python and MySQL have been used for the following reasons,
+
+1. Python provides ease of use, it is fast and has extensive resources for manipulating data to queriable format and data analysis. 
+2. In MySQL, InnoDB's index-organized structure makes name-value-pair structures that allow efficient joins for large tables and hence faster.
+
+The project is basically divided into three parts.
+1. Obtain weather data from dark sky API and transform it as per the requirements.
+2. Create two tables (for sales and weather data) and do insertion operation on them using the files provided.
+3. Generate the required reports using appropriate SQL queries and output the reults in csv files.
+
+WEATHER DATA.
+The weather data for give location has been obtained from Dark Sky API. Since, it only allows 1000 requests per day per key, multiple keys had to be created for obtaining the entire data set. The python code is such that it fetches hourly data for temperature in degree F for the year of 2016. 	
+
+TABLE CREATION AND INSERTION OPERATIONS.
+Respective tables have been created using simple SQL queries. In the insertion operation, data is first transformed to queriable format using python's datetime module and typecasting and then, it has been inserted into the tables. Drop query has been used to avoid data duplication that might occur if code is executed multiple times.
+
+REPORT GENERATION.
+The two required reports have been generated in the form of csv files. For reports, SQL SELECT operations have been performed. Joins, aggregate functions, group by, order by clauses have been used when required.
+
+ 
+
+
+
+
